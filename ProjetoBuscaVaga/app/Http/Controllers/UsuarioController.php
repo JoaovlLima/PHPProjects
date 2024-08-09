@@ -50,14 +50,14 @@ public function showRegisterForm()
 public function register(Request $request)
 {
     $request->validate([
-        'name' => 'required|string|max:255',
+        'nome' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:usuarios',
         'password' => 'required|string|min:8|confirmed',
     ]);
 
 
     $usuario = Usuario::create([
-        'name' => $request->name,
+        'nome' => $request->nome,
         'email' => $request->email,
         'password' => Hash::make($request->password),
     ]);
