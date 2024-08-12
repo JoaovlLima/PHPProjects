@@ -40,14 +40,14 @@ public function login(Request $request)
 
 
 // Exibir o formulário de registro
-public function showRegisterForm()
+public function showRegistroForm()
 {
-    return view('usuarios.register');
+    return view('usuarios.registro');
 }
 
 
 // Processar o registro de um novo usuário
-public function register(Request $request)
+public function registro(Request $request)
 {
     $request->validate([
         'nome' => 'required|string|max:255',
@@ -66,7 +66,7 @@ public function register(Request $request)
     Auth::login($usuario);
 
 
-    return redirect('/dashboard');
+     return redirect('/dashboard');
 }
 
 
