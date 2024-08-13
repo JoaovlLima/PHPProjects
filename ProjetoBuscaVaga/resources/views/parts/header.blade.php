@@ -15,6 +15,26 @@
                     <li><a href="/login">Login</a></li>
                 </ul>
             </nav>
+
+            @if (Auth::check())
+            @if (
+                request()->user()->where('tipo','empresa')->first())
+
+                    <div>
+                        Olá Empresa
+                    </div>
+            @else
+                    <div>
+                        Olá Usuário
+                    </div>
+
+                    @endif
+                    @endif
+
+                    
+
+
+
             <div class="user-actions">
                 <a href="/cadastrar" class="btn btn-primary">Cadastrar-se</a>
             </div>
