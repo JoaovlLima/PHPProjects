@@ -18,6 +18,15 @@ class Usuario extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function isUsuario()
+    {
+        return $this->tipo ==='usuario';
+    }
+   public function isEmpresa()
+    {
+        return $this->tipo === 'empresa';
+    }
+
     public function inscricoes()
     {
         return $this->hasMany(Inscricao::class);

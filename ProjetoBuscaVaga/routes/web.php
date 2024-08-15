@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\VagaController;
+use App\Http\Middleware\VagaMiddleware;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/login', [UsuarioController::class, 'showLoginForm'])->
 name('usuarios.login.form');
@@ -25,6 +28,10 @@ name('usuarios.logout');
 Route::get('/', function () {
     return view('home');
 });
+
+Route::resource('/vagas',VagaController::class)->
+middleware(VagaMiddleware::class);
+
 
 
 // Rota para o dashboard, protegida por autenticação
