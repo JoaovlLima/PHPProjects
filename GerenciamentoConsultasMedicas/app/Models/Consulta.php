@@ -17,4 +17,9 @@ class Consulta extends Model
     {
         return $this->hasMany(Agendamento::class);
     }
+
+    public function Agendamento()
+    {
+        return $this->belongsTo(Agendamento::class, 'Agendamento_id');
+    }
 }

@@ -39,7 +39,7 @@
                                     {{ ucfirst($consulta->status) }}
                                 </span>
                             </td>
-                            <td>{{ $consulta->Agendamento->data_hora->format('d/m/Y H:i') }}</td>
+                            <td>{{ $consulta->agendamento ? $consulta->agendamento->data_hora->format('d/m/Y H:i') : 'Horário não disponível' }}</td>
                             <td class="text-center">
                                 <a href="{{ route('consultas.edit', $consulta->id) }}" class="btn btn-primary btn-sm">
                                     Editar
