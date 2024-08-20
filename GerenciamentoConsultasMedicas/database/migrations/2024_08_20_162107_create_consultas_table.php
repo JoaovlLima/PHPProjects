@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('consultas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('agendamento_id')->constrained('agendamentos')->
+            $table->foreignId('Agendamento_id')->constrained('agendamentos')->
             onDelete('cascade');
             $table->string('descricao');
-            $table->string('status');
+            $table->enum('status',['pendente','confirmado','concluida'])->default('pendente');
             $table->foreignId('usuario_id')->constrained('usuarios')->
             onDelete('cascade');
             $table->timestamps();

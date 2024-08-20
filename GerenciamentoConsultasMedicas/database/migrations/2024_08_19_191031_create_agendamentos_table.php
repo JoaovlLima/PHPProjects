@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('usuario_id')->constrained('usuarios')->
             onDelete('cascade');
             $table->string('area');
-            $table->boolean('disponivel')->default('disponivel');
+            $table->enum('disponivel',['disponivel','indisponivel'])->default('disponivel');
             $table->timestamps();
         });
     }
