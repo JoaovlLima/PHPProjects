@@ -14,48 +14,44 @@
     @if ($consultas->isEmpty())
         <p class="text-center">Você ainda não tem consultas agendadas.</p>
     @else
-        <div class="table-responsive mt-4">
-            <table class="table table-bordered table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Descrição</th>
-                        <th>Status</th>
-                        <th>Data e Hora</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($consultas as $consulta)
-                        <tr>
-                            <td>{{ $consulta->id }}</td>
-                            <td>{{ $consulta->descricao }}</td>
-                            <td>
+        <div class="row mt-4">
+            @foreach ($consultas as $consulta)
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            Consulta #{{ $consulta->id }}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $consulta->descricao }}</h5>
+                            <p class="card-text">
+                                <strong>Status:</strong>
                                 <span class="badge
                                     @if($consulta->status === 'pendente') badge-warning
                                     @elseif($consulta->status === 'confirmada') badge-info
                                     @else badge-success
-                                    @endif">
+                                    @endif" style="color: black">
                                     {{ ucfirst($consulta->status) }}
                                 </span>
-                            </td>
-                            <td>{{ $consulta->agendamento ? $consulta->agendamento->data_hora->format('d/m/Y H:i') : 'Horário não disponível' }}</td>
-                            <td class="text-center">
+                            </p>
+                            <p class="card-text">
+                                <strong>Data e Hora:</strong> {{ \Carbon\Carbon::parse($consulta->agendamento->data_hora)->format('d/m/Y H:i') }}
+                            </p>
+                            <div class="d-flex justify-content-between">
                                 <a href="{{ route('consultas.edit', $consulta->id) }}" class="btn btn-primary btn-sm">
                                     Editar
                                 </a>
-                                <form action="{{ route('consultas.destroy', $consulta->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Você tem certeza que deseja excluir esta consulta?');">
+                                <form action="{{ route('consultas.destroy', $consulta->id) }}" method="POST" onsubmit="return confirm('Você tem certeza que deseja excluir esta consulta?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">
                                         Excluir
                                     </button>
                                 </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
     @endif
 

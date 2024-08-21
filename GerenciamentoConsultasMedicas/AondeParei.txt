@@ -1,4 +1,4 @@
 Estou tentando resolver o erro no consulta.home, aonde
 o formato de data_hora está como string e o
 format() só aceita timestamp
-.
+. Reolvido na linha 42 da consulta.home
