@@ -15,11 +15,23 @@ class ConsultaController extends Controller
         // Recupera o usuário autenticado
         $usuario = Auth::user();
 
-        // Recupera as consultas relacionadas a esse usuário
-        $consultas = Consulta::where('usuario_id', $usuario->id)->get();
+        // $usuario = Auth::guard('usuario')->user();
+        // if ($usuario->tipo !== 'paciente') {
+        //     return redirect()->back()->withErrors([
+        //         'authorization' => 'Somente médicos podem visualizar suas consultas.',
+        //     ]);
+        // }
 
-        // Retorna a view com a lista de consultas
-        return view('consultas.home', compact('consultas'));
+// Verifica se o usuário é um médico
+if ($usuario->tipo === 'medico') {
+    $consultas = Consulta::whereHas('agendamento', function ($query) use ($usuario) {
+        $query->where('usuario_id', $usuario->id);
+    })->with('usuario')->get();
+} else {
+    $consultas = Consulta::where('usuario_id', $usuario->id)->with('usuario')->get();
+}
+
+return view('consultas.home', compact('consultas'));
     }
 
     // Exibir o formulário de criação de uma nova consulta
@@ -38,7 +50,13 @@ public function store(Request $request)
         'Agendamento_id' => 'required|exists:agendamentos,id',
         'descricao' => 'required|string|max:255',
     ]);
-
+     // Verifica se o usuário logado é um médico
+    //  $usuario = Auth::guard('usuario')->user();
+    //  if ($usuario->tipo !== 'paciente') {
+    //      return redirect()->back()->withErrors([
+    //          'authorization' => 'Somente pacientes podem criar consultas.',
+    //      ]);
+    //  }
     // Verifica se o agendamento selecionado está disponível
     $agendamento = Agendamento::find($request->Agendamento_id);
 
@@ -53,6 +71,16 @@ public function store(Request $request)
         'status' => 'pendente',
         'usuario_id' => Auth::user()->id,
     ]);
+//filtro por data
+    // $query = Agendamento::query();
+
+    // if ($request->filled('area')) {
+    //     $query->whereDate('area', $request->area);
+    // }
+
+    // $agendamentos = $query->get();
+
+    // return view('consultas.create', compact('agendamentos'));
 
     // Atualiza o agendamento para marcar como não disponível
     $agendamento->update(['disponivel' => 'indisponivel']);
@@ -120,4 +148,30 @@ public function store(Request $request)
 
         return redirect()->route('consultas.home')->with('success', 'Consulta excluída com sucesso.');
     }
+
+     // Método para atualizar o status da consulta
+     public function updateStatus(Request $request, $id)
+     {
+         // Verifica se o usuário logado é um médico
+         $usuario = Auth::guard('usuario')->user();
+         if ($usuario->tipo !== 'medico') {
+             return redirect()->back()->withErrors([
+                 'authorization' => 'Somente médicos podem alterar o status das consultas.',
+             ]);
+         }
+
+         $consulta = Consulta::findOrFail($id);
+
+         // Valida o novo status
+         $request->validate([
+             'status' => 'required|in:pendente,confirmado,concluida',
+         ]);
+
+         // Atualiza o status da consulta
+         $consulta->update([
+             'status' => $request->status,
+         ]);
+
+         return redirect()->route('consultas.home')->with('success', 'Status da consulta atualizado com sucesso!');
+     }
 }

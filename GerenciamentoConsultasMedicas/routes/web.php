@@ -3,6 +3,7 @@
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\ConsultaController;
+use App\Http\Controllers\AreaMedicaController;
 use App\Models\Agendamento;
 use Illuminate\Support\Facades\Route;
 
@@ -94,5 +95,7 @@ Route::delete('/consultas/{id}', [ConsultaController::class, 'destroy'])
     ->name('consultas.destroy')
     ->middleware('auth'); // Somente autenticado pode excluir consultas
 
+ Route::resource('areas-medicas', AreaMedicaController::class);
 
+ Route::patch('/consultas/{id}/status', [ConsultaController::class, 'updateStatus'])->name('consultas.updateStatus');
 

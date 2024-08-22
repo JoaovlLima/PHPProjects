@@ -46,32 +46,39 @@ class UsuarioController extends Controller
 
     // Processar o registro de um novo usuário
     public function registro(Request $request)
-    {
-        // Validações para o registro
-        $request->validate([
-            'nome' => 'required|string|max:255',
-            'cpf' => 'required',new ValidCpf,
-            'password' => 'required|string|min:5|confirmed',
-            'tipo' => 'required|in:medico,paciente',
-            'crm' => 'nullable|string|required_if:tipo,medico',
-            'area' => 'nullable|string|required_if:tipo,medico|max:255',
-        ]);
+{
+     // Validações para o registro
+     $request->validate([
+        'nome' => 'required|string|max:255',
+        'cpf' => ['required', new ValidCpf],
+        'password' => 'required|string|min:5',
+        'tipo' => 'required|in:medico,paciente',
+        'crm' => 'nullable|string|required_if:tipo,medico',
+        'area' => 'nullable|array|required_if:tipo,medico',
+    ]);
 
-        // Cria um novo usuário com base no tipo
-        $usuario = Usuario::create([
-            'nome' => $request->nome,
-            'cpf' => $request->cpf,
-            'password' => Hash::make($request->password),
-            'tipo' => $request->tipo,
-            'crm' => $request->tipo === 'medico' ? $request->crm : null,
-            'area' => $request->tipo === 'medico' ? $request->area : null,
-        ]);
+    // Cria um novo usuário com base no tipo
+    $usuario = Usuario::create([
+        'nome' => $request->nome,
+        'cpf' => $request->cpf,
+        'password' => Hash::make($request->password),
+        'tipo' => $request->tipo,
+        'crm' => $request->tipo === 'medico' ? $request->crm : null,
+    ]);
 
-        // Faz login automático do novo usuário
-        Auth::guard('usuario')->login($usuario);
-
-        return redirect('/dashboard');
+    // Salva as áreas médicas
+    if ($request->tipo === 'medico' && $request->filled('area')) {
+        foreach ($request->area as $area) {
+            $usuario->areaMedicas()->create(['area' => $area]);
+        }
     }
+
+    // Faz login automático do novo usuário
+    Auth::guard('usuario')->login($usuario);
+
+    return redirect('/dashboard');
+}
+
 
     // Realizar o logout do usuário
     public function logout(Request $request)

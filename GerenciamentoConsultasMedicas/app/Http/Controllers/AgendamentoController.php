@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Agendamento;
+use App\Models\AreaMedica;
 use Illuminate\Support\Facades\Auth;
 
 class AgendamentoController extends Controller
@@ -31,10 +32,11 @@ class AgendamentoController extends Controller
             ]);
         }
 
-        // Verifica se a área selecionada coincide com a especialidade do médico
-        if ($usuario->area !== $request->area) {
+        // Verifica se a área selecionada está na lista de áreas do médico
+        $areasMedicas = $usuario->areaMedicas->pluck('area')->toArray();
+        if (!in_array($request->area, $areasMedicas)) {
             return redirect()->back()->withErrors([
-                'area' => 'Você só pode criar agendamentos para sua área de atuação: ' . $usuario->area,
+                'area' => 'Você só pode criar agendamentos para suas áreas de atuação: ' . implode(', ', $areasMedicas),
             ]);
         }
 
@@ -101,10 +103,11 @@ class AgendamentoController extends Controller
             'area' => 'required|string|max:255',
         ]);
 
-        // Verifica se a área selecionada coincide com a especialidade do médico
-        if ($usuario->area !== $request->area) {
+        // Verifica se a área selecionada está na lista de áreas do médico
+        $areasMedicas = $usuario->areaMedicas->pluck('area')->toArray();
+        if (!in_array($request->area, $areasMedicas)) {
             return redirect()->back()->withErrors([
-                'area' => 'Você só pode criar agendamentos para sua área de atuação: ' . $usuario->area,
+                'area' => 'Você só pode atualizar agendamentos para suas áreas de atuação: ' . implode(', ', $areasMedicas),
             ]);
         }
 

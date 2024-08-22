@@ -36,7 +36,25 @@
                             <p class="card-text">
                                 <strong>Data e Hora:</strong> {{ \Carbon\Carbon::parse($consulta->agendamento->data_hora)->format('d/m/Y H:i') }}
                             </p>
+                           
                             <div class="d-flex justify-content-between">
+                                @if(Auth::guard('usuario')->user()->tipo === 'medico')
+                                    @if($consulta->status === 'pendente')
+                                        <form action="{{ route('consultas.updateStatus', $consulta->id) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="status" value="confirmada">
+                                            <button type="submit" class="btn btn-info btn-sm">Confirmar</button>
+                                        </form>
+                                    @elseif($consulta->status === 'confirmada')
+                                        <form action="{{ route('consultas.updateStatus', $consulta->id) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="status" value="concluida">
+                                            <button type="submit" class="btn btn-success btn-sm">Concluir</button>
+                                        </form>
+                                    @endif
+                                @endif
                                 <a href="{{ route('consultas.edit', $consulta->id) }}" class="btn btn-primary btn-sm">
                                     Editar
                                 </a>

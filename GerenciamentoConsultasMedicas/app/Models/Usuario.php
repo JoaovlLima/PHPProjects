@@ -11,7 +11,7 @@ class Usuario extends Authenticatable
     use HasFactory;
 
     protected $fillable = [
-        'nome', 'cpf', 'password','tipo', 'crm', 'area'
+        'nome', 'cpf', 'password','tipo', 'crm'
     ];
     protected $hidden = [
         'password', 'remember_token',
@@ -32,7 +32,11 @@ class Usuario extends Authenticatable
     }
     public function Consultas()
     {
-        return $this->hasMany(Consulta::class);
+        return $this->hasMany(Consulta::class,'usuario_id');
+    }
+    public function areaMedicas()
+    {
+        return $this->hasMany(AreaMedica::class);
     }
 
 

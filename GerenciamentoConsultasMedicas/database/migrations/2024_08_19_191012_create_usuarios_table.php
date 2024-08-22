@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('password');
             $table->enum('tipo',['paciente','medico'])->default('paciente');
             $table->string('crm')->nullable();
-            $table->string('area')->nullable();
             $table->rememberToken();
 
             $table->timestamps();
