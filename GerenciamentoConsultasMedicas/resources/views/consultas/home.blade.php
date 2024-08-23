@@ -11,6 +11,12 @@
         </div>
     @endif
 
+    @if ($errors->has('authorization'))
+        <div class="alert alert-danger text-center">
+            {{ $errors->first('authorization') }}
+        </div>
+    @endif
+
     @if ($consultas->isEmpty())
         <p class="text-center">Você ainda não tem consultas agendadas.</p>
     @else
@@ -27,7 +33,7 @@
                                 <strong>Status:</strong>
                                 <span class="badge
                                     @if($consulta->status === 'pendente') badge-warning
-                                    @elseif($consulta->status === 'confirmada') badge-info
+                                    @elseif($consulta->status === 'confirmado') badge-info
                                     @else badge-success
                                     @endif" style="color: black">
                                     {{ ucfirst($consulta->status) }}
@@ -36,17 +42,17 @@
                             <p class="card-text">
                                 <strong>Data e Hora:</strong> {{ \Carbon\Carbon::parse($consulta->agendamento->data_hora)->format('d/m/Y H:i') }}
                             </p>
-                           
+
                             <div class="d-flex justify-content-between">
                                 @if(Auth::guard('usuario')->user()->tipo === 'medico')
                                     @if($consulta->status === 'pendente')
                                         <form action="{{ route('consultas.updateStatus', $consulta->id) }}" method="POST">
                                             @csrf
                                             @method('PATCH')
-                                            <input type="hidden" name="status" value="confirmada">
+                                            <input type="hidden" name="status" value="confirmado">
                                             <button type="submit" class="btn btn-info btn-sm">Confirmar</button>
                                         </form>
-                                    @elseif($consulta->status === 'confirmada')
+                                    @elseif($consulta->status === 'confirmado')
                                         <form action="{{ route('consultas.updateStatus', $consulta->id) }}" method="POST">
                                             @csrf
                                             @method('PATCH')

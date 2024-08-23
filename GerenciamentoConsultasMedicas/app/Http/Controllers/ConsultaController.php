@@ -37,6 +37,13 @@ return view('consultas.home', compact('consultas'));
     // Exibir o formulário de criação de uma nova consulta
     public function create()
 {
+    $usuario = Auth::user();
+    // Verifica se o usuário logado é um médico
+    if ($usuario->tipo === 'medico') {
+        return redirect()->route('consultas.home')->withErrors([
+            'authorization' => 'Somente pacientes podem criar consultas. Médicos podem apenas gerenciar suas consultas.',
+        ]);
+    }
     // Recupera todos os agendamentos disponíveis, independentemente de quem os criou
     $agendamentos = Agendamento::where('disponivel', 'disponivel')->get();
 
@@ -50,13 +57,7 @@ public function store(Request $request)
         'Agendamento_id' => 'required|exists:agendamentos,id',
         'descricao' => 'required|string|max:255',
     ]);
-     // Verifica se o usuário logado é um médico
-    //  $usuario = Auth::guard('usuario')->user();
-    //  if ($usuario->tipo !== 'paciente') {
-    //      return redirect()->back()->withErrors([
-    //          'authorization' => 'Somente pacientes podem criar consultas.',
-    //      ]);
-    //  }
+
     // Verifica se o agendamento selecionado está disponível
     $agendamento = Agendamento::find($request->Agendamento_id);
 
@@ -113,6 +114,8 @@ public function store(Request $request)
     public function update(Request $request, $id)
     {
         $consulta = Consulta::findOrFail($id);
+
+
 
         // Validação dos dados
         $request->validate([

@@ -58,6 +58,9 @@
                                     <option value="Dermatologia">Dermatologia</option>
                                     <option value="Ortopedia">Ortopedia</option>
                                     <option value="Clinico Geral">Clinico Geral</option>
+                                    <option value="Ginecologia">Ginecologia</option>
+
+
                                     <!-- Adicione outras áreas conforme necessário -->
                                 </select>
                                 @error('area')
