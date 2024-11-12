@@ -10,47 +10,42 @@
 ```mermaid
 classDiagram
     class Usuario {
-        +Integer id
-        +String nome
-        +String email
-        +String senha
+        - int id
+        - String nome
+        - String email
     }
 
-    class Categoria {
-        +Integer id
-        +String nome
-        +String tipo
-        +Integer usuario_id
-        +Usuario usuario
+    class Setor {
+        - int id
+        - String nome
     }
 
-    class Conta {
-        +Integer id
-        +String nome
-        +Decimal saldo
-        +Integer usuario_id
-        +Usuario usuario
+    class Tarefa {
+        - int id
+        - String titulo
+        - String descricao
+        - Date dataCriacao
+        - Date dataConclusao
+        - Status status
+        - int setorId
     }
 
-    class Transacao {
-        +Integer id
-        +String descricao
-        +Decimal valor
-        +Date data
-        +String tipo
-        +Integer categoria_id
-        +Integer conta_id
-        +Integer usuario_id
-        +Categoria categoria
-        +Conta conta
-        +Usuario usuario
+    class Kanban {
+        - int id
+        - String titulo
+        - Date dataCriacao
     }
 
-    Usuario "1" --> "*" Categoria : "possui"
-    Usuario "1" --> "*" Conta : "possui"
-    Usuario "1" --> "*" Transacao : "realiza"
-    Categoria "1" --> "*" Transacao : "classifica"
-    Conta "1" --> "*" Transacao : "contabiliza"
+    class Status {
+        - int id
+        - String nome
+    }
+
+    Usuario "1" -- "0..*" Setor : acessa
+    Setor "1" -- "0..*" Tarefa : gerencia
+    Tarefa "1" -- "1" Status : possui
+    Kanban "1" -- "0..*" Tarefa : organiza
+
     
 ```
 
