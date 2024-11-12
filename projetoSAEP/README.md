@@ -49,4 +49,19 @@ classDiagram
     
 ```
 
+```mermaid
+usecaseDiagram
+    actor Usuario
+    usecase U1 as "Cadastrar Usuario"
+    usecase U2 as "Criar Tarefa"
+    usecase U3 as "Atribuir Responsável"
+    usecase U4 as "Alterar Status da Tarefa"
+    usecase U5 as "Organizar Tarefas no Kanban"
+
+    Usuario --> U1
+    Usuario --> U2
+    Usuario --> U3
+    Usuario --> U4
+    Usuario --> U5
+```
 
