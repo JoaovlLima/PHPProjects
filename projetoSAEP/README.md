@@ -7,6 +7,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+```mermaid
 classDiagram
     class Usuario {
         +Integer id
@@ -51,6 +52,6 @@ classDiagram
     Categoria "1" --> "*" Transacao : "classifica"
     Conta "1" --> "*" Transacao : "contabiliza"
     
-
+```
 
 
